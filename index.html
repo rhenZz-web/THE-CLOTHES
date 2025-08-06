@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>THE SHOP - Products</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    header {
+      background-color: #111;
+      color: #fff;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    main {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .controls input,
+    .controls select {
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 300px;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    .product-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.05);
+      padding: 1rem;
+      transition: transform 0.2s ease;
+    }
+    .product-card:hover {
+      transform: scale(1.03);
+    }
+    .product-card img {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+    .product-info {
+      margin-top: 1rem;
+    }
+    .product-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    .product-price {
+      color: #e91e63;
+      margin-top: 0.3rem;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #111;
+      color: #fff;
+      margin-top: 3rem;
+    }
+    @media (min-width: 600px) {
+      .controls {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>THE SHOP</h1>
+    <p>Explore our latest clothing collection</p>
+  </header>
+
+  <main>
+    <div class="controls">
+      <input type="text" id="searchInput" placeholder="Search for a product..." />
+      <select id="categoryFilter">
+        <option value="all">All Categories</option>
+        <option value="T-Shirt">T-Shirts</option>
+        <option value="Jacket">Jackets</option>
+        <option value="Jeans">Jeans</option>
+        <option value="Dress">Dresses</option>
+        <option value="Shoes">Shoes</option>
+      </select>
+    </div>
+
+    <div class="product-grid" id="productGrid">
+      <!-- Dynamic product cards will be inserted here -->
+    </div>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> THE SHOP. All rights reserved.
+  </footer>
+
+  <script>
+    const products = [
+      {
+        name: "Classic White T-Shirt",
+        price: "$19.99",
+        category: "T-Shirt",
+        image: "https://via.placeholder.com/300x300?text=T-Shirt"
+      },
+      {
+        name: "Blue Denim Jacket",
+        price: "$49.99",
+        category: "Jacket",
+        image: "https://via.placeholder.com/300x300?text=Jacket"
+      },
+      {
+        name: "Slim Fit Jeans",
+        price: "$39.99",
+        category: "Jeans",
+        image: "https://via.placeholder.com/300x300?text=Jeans"
+      },
+      {
+        name: "Summer Floral Dress",
+        price: "$29.99",
+        category: "Dress",
+        image: "https://via.placeholder.com/300x300?text=Dress"
+      },
+      {
+        name: "Running Sneakers",
+        price: "$59.99",
+        category: "Shoes",
+        image: "https://via.placeholder.com/300x300?text=Sneakers"
+      },
+      {
+        name: "Black Hoodie",
+        price: "$34.99",
+        category: "T-Shirt",
+        image: "https://via.placeholder.com/300x300?text=Hoodie"
+      }
+    ];
+
+    const productGrid = document.getElementById("productGrid");
+    const searchInput = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
+
+    function renderProducts(filteredProducts) {
+      productGrid.innerHTML = "";
+      if (filteredProducts.length === 0) {
+        productGrid.innerHTML = "<p>No products found.</p>";
+        return;
+      }
+      filteredProducts.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <img src="${product.image}" alt="${product.name}">
+          <div class="product-info">
+            <div class="product-title">${product.name}</div>
+            <div class="product-price">${product.price}</div>
+          </div>
+        `;
+        productGrid.appendChild(card);
+      });
+    }
+
+    function filterProducts() {
+      const searchValue = searchInput.value.toLowerCase();
+      const selectedCategory = categoryFilter.value;
+      const filtered = products.filter(product => {
+        const matchesName = product.name.toLowerCase().includes(searchValue);
+        const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
+        return matchesName && matchesCategory;
+      });
+      renderProducts(filtered);
+    }
+
+    renderProducts(products);
+    searchInput.addEventListener("input", filterProducts);
+    categoryFilter.addEventListener("change", filterProducts);
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
